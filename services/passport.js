@@ -21,14 +21,16 @@ passport.use(
         clientID: keys.fb_app_id,
         clientSecret: keys.fb_app_secret,
         callbackURL: '/auth/facebook/callback'
-    }, async (accessToken, refreshToken, profile, done) => {
+    }, (accessToken, refreshToken, profile, done) => {
         
-        const existingUser = await User.findOne({facebook_id: profile.id});
-        if(existingUser){
-            return done(null, existingUser);
-        }
+        User.findOne({facebook_id: profile.id}).then( existingUser => {
+            if(existingUser){
+                return done(null, existingUser);
+            }
 
-        const newUser = await new User({facebook_id: profile.id}).save()
-        done(null, newUser);
+            new User({facebook_id: profile.id}).save().then( newUser => {
+                done(null, newUser);
+            });
+        });
     })
 );
