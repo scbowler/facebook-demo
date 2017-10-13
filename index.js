@@ -4,6 +4,8 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const keys = require('./config/keys');
+const io = require('socket.io');
+const http = require('http');
 const PORT = process.env.PORT || 5000;
 
 require('./models/user');
